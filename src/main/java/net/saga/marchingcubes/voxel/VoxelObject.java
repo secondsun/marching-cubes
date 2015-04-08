@@ -19,6 +19,8 @@ package net.saga.marchingcubes.voxel;
 
 import net.saga.marchingcubes.core.Vector3f;
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLDrawable;
 import net.saga.marchingcubes.core.BaseGraphicsObject;
 
 /**
@@ -31,7 +33,8 @@ public class VoxelObject extends BaseGraphicsObject{
     public Vector3f color = new Vector3f((float) (Math.random() ),(float) (Math.random() ), (float) Math.random() );
     
     @Override
-    public void render(GL2 gl) {
+    public void render(GLAutoDrawable drawable) {
+        GL2 gl = (GL2) drawable.getGL();
         gl.glPushMatrix();
 
         gl.glMultMatrixf(transform.getMatrix(), 0);

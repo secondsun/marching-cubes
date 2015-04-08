@@ -17,7 +17,7 @@
  */
 package net.saga.marchingcubes.core;
 
-import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.math.Matrix4;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,9 @@ public abstract class BaseGraphicsObject {
     
     public List<Component> components = new ArrayList<>();
     
-    public abstract void render(GL2 gl);
+    public abstract void render(GLAutoDrawable drawable);
     
-    public void update(){};
+    public void update(GLAutoDrawable drawable){};
     
     public void addComponent(Component component) {
         components.add(component);

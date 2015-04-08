@@ -36,10 +36,5 @@ public class Camera {
         this.far = far;
     }
 
-    public Matrix4 viewMatrix() {
-        Matrix4 m = new Matrix4();
-        m.makeOrtho(left, right, bottom, top, near, near);
-        return m;
-    }
 
 }

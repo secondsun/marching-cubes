@@ -18,6 +18,8 @@
 package net.saga.marchingcubes.voxel;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.math.Matrix4;
 import net.saga.marchingcubes.core.BaseGraphicsObject;
 import net.saga.marchingcubes.core.Vector3f;
@@ -93,22 +95,23 @@ public class VoxelMap extends BaseGraphicsObject {
     }
 
     @Override
-    public void render(GL2 gl) {
+        public void render(GLAutoDrawable drawable) {
+        GL2 gl = (GL2) drawable.getGL();
         gl.glPushMatrix();
 
         //gl.glMultMatrixf(transform.getMatrix(), 0);
         gl.glTranslatef(localPosition.x(), localPosition.y(), 0);
         gl.glScalef(localScale.x(), localScale.y(), 1);
         for (VoxelGrid chunk : chunks) {
-            chunk.render(gl);
+            chunk.render(drawable);
         }
         gl.glPopMatrix();
     }
 
     @Override
-    public void update() {
+    public void update(GLAutoDrawable drawable) {
         for (VoxelGrid chunk : chunks) {
-            chunk.update();
+            chunk.update(drawable);
         }
     }
     

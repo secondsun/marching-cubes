@@ -20,6 +20,9 @@ package net.saga.marchingcubes.voxel;
 import com.jogamp.newt.event.MouseEvent;
 import net.saga.marchingcubes.core.Vector3f;
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLDrawable;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.math.FloatUtil;
 import com.jogamp.opengl.math.Matrix4;
 import java.util.Arrays;
@@ -63,59 +66,65 @@ public class VoxelGrid extends BaseGraphicsObject {
     }
 
     @Override
-    public void render(GL2 gl) {
+        public void render(GLAutoDrawable drawable) {
+        GL2 gl = (GL2) drawable.getGL();
         gl.glPushMatrix();
         gl.glMultMatrixf(transform.getMatrix(), 0);
         gl.glTranslatef(localPosition.x(), localPosition.y(), 0);
         gl.glScalef(localScale.x(), localScale.y(), 1);
         for (VoxelObject o : voxels) {
-            o.render(gl);
+            o.render(drawable);
         }
         gl.glPopMatrix();
     }
 
     @Override
-    public void update() {
+    public void update(GLAutoDrawable drawable) {
+        
         MouseEvent event = Event.INSTANCE.event;
         if (event != null && event.isButtonDown(MouseEvent.BUTTON1)) {
+            GL2 gl = (GL2) drawable.getGL();
             float winX = event.getX();
             float winY = event.getY();
 
             System.out.println("Clicked [" + winX + ", " + winY + "]");
 
-            // viewportOriginX, viewportOriginY, viewportWidth, viewportHeight
-            float[] viewPort = {0, 0, 800, 600};
-
             float[] objPos = new float[4];  // out parameter.
-
-            // The camera"s model-view matrix is the result of gluLookAt.
-            Matrix4 modelViewMatrix = Game.MODELVIEW_MATRIX;
-
-            // The perspective matrix is the result of gluPerspective.
-            Matrix4 perspectiveMatrix = Game.CAMERA.viewMatrix();
+            float[] matModelView = new float[16];
+            float[] matProjection = new float[16];
+            int[] viewPort = new int[4];
+            
+            // get matrixs and viewport:
+            gl.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, matModelView, 0 ); 
+            gl.glGetFloatv( GL2.GL_PROJECTION_MATRIX, matProjection,0 ); 
+            gl.glGetIntegerv( GL2.GL_VIEWPORT, viewPort, 0 );
 
             // Ray start
-            boolean result1 = gluUnProject(
-                    winX, winY, 0.0f,
-                    modelViewMatrix, perspectiveMatrix,
-                    viewPort, objPos);
+            new GLU().gluUnProject(
+                    winX, winY, 1.0f,
+                    matModelView, 0,
+                    matProjection,0,
+                    viewPort, 0,
+                    objPos, 0 );
             System.out.println(
-                    "Seg start: " + Arrays.toString(objPos) + " (result:" + result1 + ")"
+                    "Seg start: " + Arrays.toString(objPos) + " (result:" + true + ")"
             );
 
             // Ray end
-            boolean result2 = gluUnProject(
-                    winX, winY, 1.0f,
-                    modelViewMatrix, perspectiveMatrix,
-                    viewPort, objPos);
+            new GLU().gluUnProject(
+                    winX, winY, 0.0f,
+                    matModelView, 0,
+                    matProjection,0,
+                    viewPort, 0,
+                    objPos, 0 );
             System.out.println(
-                    "Seg end: " +  Arrays.toString(objPos) + " (result:" + result2 + ")"
+                    "Seg end: " +  Arrays.toString(objPos) + " (result:" + true + ")"
             );
             Event.INSTANCE.consume(event);
         }
     }
 
-    private boolean gluUnProject(float winX, float winY, float winZ, Matrix4 modelViewMatrix, Matrix4 projectionMatrix, float[] viewPort, float[] objPos) {
+    private boolean gluUnProject(float winX, float winY, float winZ, float[] modelViewMatrix, float[] projectionMatrix, float[] viewPort, float[] objPos) {
         Matrix4 transformMatrix = new Matrix4();
         transformMatrix.multMatrix(projectionMatrix);
         transformMatrix.multMatrix(modelViewMatrix);
@@ -164,7 +173,7 @@ public class VoxelGrid extends BaseGraphicsObject {
         resultArr[3] = 1.0f / resultArr[3];
 
         objPos[0] = resultArr[0] * resultArr[3];
-        objPos[1] = resultArr[1] * resultArr[3];
+        objPos[1] = -1* (resultArr[1] * resultArr[3]);//Fuck it invert u
         objPos[2] = resultArr[2] * resultArr[3];
 
         return true;

@@ -21,6 +21,7 @@ import static com.jogamp.opengl.GL.GL_COLOR_BUFFER_BIT;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.math.Matrix4;
 import net.saga.marchingcubes.core.Camera;
 import net.saga.marchingcubes.voxel.VoxelMap;
@@ -33,7 +34,7 @@ public class Game implements GLEventListener {
 
     private GL2 gl;
 
-    public static final Camera CAMERA = new Camera(-1.1f,1.1f, -1.1f, 1.1f, -1, 1);
+    
     public static Matrix4 PROJECTION_MATRIX;
     public static Matrix4 MODELVIEW_MATRIX;
     private VoxelMap grid = new VoxelMap();
@@ -43,17 +44,15 @@ public class Game implements GLEventListener {
         gl = (GL2) drawable.getGL();
         grid = new VoxelMap();
         gl.glLoadIdentity();
-        gl.glOrtho(CAMERA.left, CAMERA.right, CAMERA.bottom, CAMERA.top, CAMERA.near, CAMERA.far);
+        gl.glMatrixMode(GL2.GL_PROJECTION);
+        gl.glViewport(0, 0, 800, 600);
+
+        gl.glOrtho(-2f,2f, -2f, 2f, 10, -10);
+        
         gl.glMatrixMode(GL2.GL_MODELVIEW);
 
-        gl.glViewport(0, 0, 800, 600);
         gl.glClearColor(0, 0, 0, 0);
-        
-        PROJECTION_MATRIX = new Matrix4();
-        gl.glGetFloatv(GL2.GL_PROJECTION_MATRIX, PROJECTION_MATRIX.getMatrix(), 0);
-        
-        MODELVIEW_MATRIX = new Matrix4();
-        gl.glGetFloatv(GL2.GL_MODELVIEW, MODELVIEW_MATRIX.getMatrix(), 0);
+
     }
 
     @Override
@@ -64,10 +63,10 @@ public class Game implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
 
-        grid.update();
+        grid.update(drawable);
         gl.glClear(GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-        grid.render(gl);
+        grid.render(drawable);
         
     }
 
