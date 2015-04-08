@@ -17,29 +17,33 @@
  */
 package net.saga.marchingcubes.core;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.math.Matrix4;
-import java.util.ArrayList;
-import java.util.List;
+import com.jogamp.newt.event.MouseAdapter;
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseListener;
 
 /**
  *
  * @author summers
  */
-public abstract class BaseGraphicsObject {
+public class Event {
+    
+    public static final Event INSTANCE = new Event();
+    
+    public MouseEvent event;
+    public final MouseListener listener = new MouseAdapter() {
 
-    public Matrix4 transform = new Matrix4();
-    public Vector3f localPosition = Vector3f.ZERO;
-    public Vector3f localScale = Vector3f.UNIT;
-    
-    public List<Component> components = new ArrayList<>();
-    
-    public abstract void render(GL2 gl);
-    
-    public void update(){};
-    
-    public void addComponent(Component component) {
-        components.add(component);
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            event = e;
+        }
+        
+    };
+
+
+    private Event(){}
+
+    public void consume(MouseEvent event) {
+        this.event = null;
     }
     
 }

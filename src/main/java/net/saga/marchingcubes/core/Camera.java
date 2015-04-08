@@ -17,29 +17,29 @@
  */
 package net.saga.marchingcubes.core;
 
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.math.Matrix4;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author summers
  */
-public abstract class BaseGraphicsObject {
+public class Camera {
 
-    public Matrix4 transform = new Matrix4();
-    public Vector3f localPosition = Vector3f.ZERO;
-    public Vector3f localScale = Vector3f.UNIT;
-    
-    public List<Component> components = new ArrayList<>();
-    
-    public abstract void render(GL2 gl);
-    
-    public void update(){};
-    
-    public void addComponent(Component component) {
-        components.add(component);
+    public final float left, right, top, bottom, near, far;
+
+    public Camera(float left, float right, float bottom, float top, float near, float far) {
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+        this.near = near;
+        this.far = far;
     }
-    
+
+    public Matrix4 viewMatrix() {
+        Matrix4 m = new Matrix4();
+        m.makeOrtho(left, right, bottom, top, near, near);
+        return m;
+    }
+
 }

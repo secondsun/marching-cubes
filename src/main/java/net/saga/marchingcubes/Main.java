@@ -31,6 +31,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
 import java.util.concurrent.atomic.AtomicBoolean;
+import net.saga.marchingcubes.core.Event;
 
 /**
  * Launches a new GLWindow
@@ -59,7 +60,8 @@ public class Main {
         window.setSize(800, 600);
 
         window.addGLEventListener(new Game());
-
+        window.addMouseListener(Event.INSTANCE.listener);
+        
         FPSAnimator animator = new FPSAnimator(window, 60);
         animator.start();
     }

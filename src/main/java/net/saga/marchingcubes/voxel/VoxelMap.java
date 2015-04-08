@@ -105,4 +105,13 @@ public class VoxelMap extends BaseGraphicsObject {
         gl.glPopMatrix();
     }
 
+    @Override
+    public void update() {
+        for (VoxelGrid chunk : chunks) {
+            chunk.update();
+        }
+    }
+    
+    
+
 }

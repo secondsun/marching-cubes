@@ -15,31 +15,14 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.saga.marchingcubes.core;
+package net.saga.marchingcubes.component;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.math.Matrix4;
-import java.util.ArrayList;
-import java.util.List;
+import net.saga.marchingcubes.core.Component;
 
 /**
  *
  * @author summers
  */
-public abstract class BaseGraphicsObject {
-
-    public Matrix4 transform = new Matrix4();
-    public Vector3f localPosition = Vector3f.ZERO;
-    public Vector3f localScale = Vector3f.UNIT;
-    
-    public List<Component> components = new ArrayList<>();
-    
-    public abstract void render(GL2 gl);
-    
-    public void update(){};
-    
-    public void addComponent(Component component) {
-        components.add(component);
-    }
+public class BoxCollider implements Component {
     
 }
