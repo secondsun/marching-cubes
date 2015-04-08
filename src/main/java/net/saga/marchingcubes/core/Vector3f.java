@@ -15,54 +15,45 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.saga.marchingcubes.window;
-
-import com.jogamp.newt.event.WindowEvent;
-import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
+package net.saga.marchingcubes.core;
 
 /**
  *
  * @author summers
  */
-public class OnCloseListener implements WindowListener {
+public class Vector3f {
+    
+    private static final int X = 0;
+    private static final int Y = 1;
+    private static final int Z = 2;
+    
+    public static Vector3f UNIT = new Vector3f(1f,1f,1f);
+    public static Vector3f ZERO = new Vector3f(0f,0f,0f);
 
-    public OnCloseListener() {
+    private final float[] vector;
+    
+    public Vector3f(float x, float y, float z) {
+        vector = new float[]{x,y,z};
+    }
+    
+    public float[] vector() {
+        return new float[]{vector[X], vector[Y], vector[Z] };
     }
 
-    @Override
-    public void windowResized(WindowEvent e) {
-        
+    public Vector3f scale(float scalar) {
+        return new Vector3f(vector[X] * scalar, vector[Y] * scalar, vector[Z] * scalar );
     }
 
-    @Override
-    public void windowMoved(WindowEvent e) {
-        
+    public float x() {
+        return vector[X];
     }
-
-    @Override
-    public void windowDestroyNotify(WindowEvent e) {
-        
+    
+    public float y() {
+        return vector[Y];
     }
-
-    @Override
-    public void windowDestroyed(WindowEvent e) {
-        System.exit(0);
-    }
-
-    @Override
-    public void windowGainedFocus(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowLostFocus(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowRepaint(WindowUpdateEvent e) {
-        
+    public float z() {
+        return vector[Z];
     }
     
 }
+

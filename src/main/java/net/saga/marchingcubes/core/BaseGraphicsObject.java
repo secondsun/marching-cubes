@@ -15,54 +15,21 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-package net.saga.marchingcubes.window;
+package net.saga.marchingcubes.core;
 
-import com.jogamp.newt.event.WindowEvent;
-import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.math.Matrix4;
 
 /**
  *
  * @author summers
  */
-public class OnCloseListener implements WindowListener {
+public abstract class BaseGraphicsObject {
 
-    public OnCloseListener() {
-    }
-
-    @Override
-    public void windowResized(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowMoved(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDestroyNotify(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDestroyed(WindowEvent e) {
-        System.exit(0);
-    }
-
-    @Override
-    public void windowGainedFocus(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowLostFocus(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowRepaint(WindowUpdateEvent e) {
-        
-    }
+    public Matrix4 transform = new Matrix4();
+    public Vector3f localPosition = Vector3f.ZERO;
+    public Vector3f localScale = Vector3f.UNIT;
+    
+    public abstract void render(GL2 gl);
     
 }
